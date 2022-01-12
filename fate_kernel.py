@@ -1,34 +1,21 @@
-# This Python 3 environment comes with many helpful analytics libraries installed
-# It is defined by the kaggle/python Docker image: https://github.com/kaggle/docker-python
-# For example, here's several helpful packages to load
-
-import numpy as np # linear algebra
-import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
-from keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.optimizers import SGD
-from keras.preprocessing.image import img_to_array
-from sklearn.preprocessing import LabelBinarizer
-from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
-import numpy as np
-import argparse
-import random
-import pickle
-import cv2
 import os
-from keras.models import Sequential
+
+import cv2
+import numpy as np
+from keras.layers import Activation
 from keras.layers import BatchNormalization
 from keras.layers import Conv2D
-from keras.layers import MaxPooling2D
-from keras.layers import Activation
-from keras.layers import Flatten
-from keras.layers import Dropout
 from keras.layers import Dense
-from keras import backend as K
-
-# Input data files are available in the read-only "../input/" directory
-# For example, running this (by clicking run or pressing Shift+Enter) will list all files under the input directory
+from keras.layers import Dropout
+from keras.layers import Flatten
+from keras.layers import MaxPooling2D
+from keras.models import Sequential
+from keras.preprocessing.image import ImageDataGenerator
+from keras.preprocessing.image import img_to_array
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelBinarizer
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.optimizers import SGD
 
 image_paths = []
 data = []
@@ -39,10 +26,6 @@ for dirname, _, filenames in os.walk('dataset-100/'):
     for filename in filenames:
         print(os.path.join(dirname, filename))
         image_paths.append(os.path.join(dirname, filename))
-#
-# print(image_paths)
-# print(image_paths[0].split(os.path.sep)[-2])
-
 
 
 for imagePath in image_paths:
@@ -72,12 +55,6 @@ aug = ImageDataGenerator(rotation_range=25, width_shift_range=0.1,
                          height_shift_range=0.1, shear_range=0.2, zoom_range=0.2,
                          horizontal_flip=True, fill_mode="nearest")
 
-
-# You can write up to 5GB to the current directory (/kaggle/working/) that gets preserved as output when you create a version using "Save & Run All" 
-# You can also write temporary files to /kaggle/temp/, but they won't be saved outside of the current session
-
-# print(os.listdir("../input/fate-stay-night-main-character-faces/dataset-100/rin"))
-
 EPOCHS = 100
 INIT_LR = 1e-3
 BS = 32
@@ -85,12 +62,6 @@ BS = 32
 model = Sequential()
 inputShape = (100, 100, 3)
 chanDim = -1
-
-        # if we are using "channels first", update the input shape
-        # and channels dimension
-# if K.image_data_format() == "channels_first":
-#     inputShape = (depth, height, width)
-#     chanDim = 1
 
         # CONV => RELU => POOL
 model.add(Conv2D(64, (3, 3), padding='same', activation='relu', input_shape=inputShape))  # First pair "CONV -> RELU", resembling VGG16's structure
